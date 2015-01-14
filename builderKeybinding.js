@@ -252,6 +252,17 @@ javascript: void function() {
       			}
 			});
 
+
+      		createMouseTrapScript(editorWindow[0]);
+
+      		setTimeout(function () {
+      			var mt = $('iframe.ui-frame')[0].contentWindow.Mousetrap;
+      			mt.stopCallback = function () {};
+	      		mt.bind('ctrl+shift+i', function (e) {
+	      			parent.focus();
+	      		});	
+      		}, 2000)
+
 			//When click on link it will also scroll to the element
 			$('a.title').click(function(){
 				toggleInteractiveClass( currentElement, false );
