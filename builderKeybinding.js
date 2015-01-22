@@ -29,11 +29,14 @@ javascript: void function() {
 	head.appendChild(style);
 
 	createMouseTrapScript(document);
-	
+
+	App.viewport.notify('Initalizing keyboard shortcuts...', 2000);
 
 	var currentElement, tmpElement;
 
 	setTimeout(function () {
+
+		App.viewport.notify('Keyboard shortcuts initialized! Hit <b>Ctrl+shift+i</b> to get started!');
 
 		var editorWindow = $('iframe.ui-frame').contents();
 
@@ -73,10 +76,14 @@ javascript: void function() {
 		};
 
 		Mousetrap.bind('ctrl+shift+i', function (e) {
+			
+			//Dismiss alert box
+			$('.alert').find('.close').trigger('click');
 
 			var modalHTML = [
 					'<div id="shortcuts" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="shortCutsLabel" aria-hidden="true">',
-					'<div class="modal-dialog"><div class="modal-content">',
+					'<div class="modal-dialog">',
+					'<div class="modal-content" style="background: rgba(51, 51, 51, 0.85); color: #ffffff;">',
 	      			'<div class="modal-body">',
 	      			'<div class="container-fluid"><div class="row">',
 	      			'<div class="col-sm-4 col-md-4">',
@@ -84,10 +91,12 @@ javascript: void function() {
 	      			'<h5>&lt;Up / Down&gt;</h5><p>Move up or down</p>',
 	      			'<h5>&lt;Left / Right&gt;</h5><p>Collapse / Expand</p>',
 	      			'<h5>&lt;Enter&gt;</h5><p>If focus on container element will expand/collapse, scroll to element, and open up editing mode for images, links, videos',
-	      			'</div><div class="col-sm-4 col-md-4">',
 	      			'<h5>&lt;Shift+Enter&gt;</h5><p>Enter inline editing mode for <b>Text</b> element',
+	      			'</div><div class="col-sm-4 col-md-4">',
+	      			'<h5>&lt;Ctrl+shift+z&gt;</h5><p>Clear format from highlighted texts</p>',
 	      			'<h5>&lt;Esc&gt;</h5><p>Dismiss editor modals (excepted LeadBox) and refocus to sidebar if in Text editing mode</p>',
 	      			'<h5>&lt;Ctrl+Shift+C&gt;</h5><p>Collapse all</p>',
+	      			'<h5>&lt;Ctrl+`&gt;</h5><p>Toggle Sidebar</p>',
 	      			'<h5>&lt;Ctrl+1&gt; / &lt;Ctrl+2&gt; / &lt;Ctrl+3&gt;</h5><p>Responsive / Tablet / Phone viewing mode</p>',
 	      			'</div><div class="col-sm-4 col-md-4">',
 	      			'<h5>&lt;Ctrl+s&gt;</h5><p>Save page</p>',
@@ -108,6 +117,11 @@ javascript: void function() {
 			$('.expand.fa-minus-square').trigger('click');
 			currentElement = $('.list-group-item').eq(0);
 			toggleInteractiveClass(currentElement, true);
+
+			//Toggle Sidebar
+			Mousetrap.bind('ctrl+shift+h', function(){
+				App.Interface.viewport.toggleMenu();
+			});
 
 			//Collapse All
 			Mousetrap.bind('ctrl+shift+c', function(){
@@ -164,7 +178,13 @@ javascript: void function() {
 
 			//Expands/Collapse parent + scroll to element + opens up editor/modal
 			Mousetrap.bind('enter', function (e) {
+
+				App.viewport.hideTextEditor();
+
 				var dataID = currentElement.closest('li').data('editable-id');
+
+				//TODO: Paste in url for video element
+				//var isVideoElement = currentElement.find('fa-video-camera');
 
 				if($('.modal.fade.in').is(':visible')){
 					return false;
@@ -185,19 +205,8 @@ javascript: void function() {
 
 				if(isTextElement.length){
 					App.viewport.showTextEditor(dataID[0], true);
-					console.log()
 				}
 			});
-
-			//Re-focus on sidebar
-			createMouseTrapScript(editorWindow[0]);
-      		setTimeout(function () {
-      			var mt = $('iframe.ui-frame')[0].contentWindow.Mousetrap;
-      			mt.stopCallback = function () {};
-	      		mt.bind('esc', function (e) {
-	      			parent.focus();
-	      		});	
-      		}, 2000);
 
 			//Close modals
 			Mousetrap.bind('esc', function (e) {
@@ -208,6 +217,21 @@ javascript: void function() {
 					doneButton.trigger('click');
 				}
 
+				if($('.viewmode-editing').is(':visible')){
+					App.viewport.hideTextEditor();
+				}
+
+			});
+
+			//Toggle sidebar
+			Mousetrap.bind('ctrl+`', function (){
+				var sidebar = $('.menu.ui-main-menu'); 
+
+				if(sidebar.css('left') == '0px'){
+					App.viewport.hideMenu();
+				} else {
+					App.viewport.showMenu();
+				}
 			});
 
 			//Desktop View Mode
@@ -258,9 +282,20 @@ javascript: void function() {
       		setTimeout(function () {
       			var mt = $('iframe.ui-frame')[0].contentWindow.Mousetrap;
       			mt.stopCallback = function () {};
-	      		mt.bind('ctrl+shift+i', function (e) {
+
+      			//Re-focus on side bar
+	      		mt.bind('esc', function (e) {
 	      			parent.focus();
+	      			App.viewport.hideTextEditor();
 	      		});	
+
+	      		//Clear formatting
+	      		mt.bind('ctrl+shift+z', function(){
+	      			var textEditorMode = App.viewport.$;
+	      			if(textEditorMode.find('.viewmode-editing').is(':visible')){
+	      				textEditorMode.find('#cke_139').trigger('click');
+	      			}
+	      		});
       		}, 2000)
 
 			//When click on link it will also scroll to the element
