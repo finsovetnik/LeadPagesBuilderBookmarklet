@@ -12,10 +12,11 @@ javascript:(function(){var el=document.createElement('script');el.src='https://c
 
 ## Usage
 
-1. To enter interactive mode, simply type `ctrl + shift + i`
-2. The builder menu items will automatically collapse
-3. Use the arrow keys to [navigate the builder](#navigation)
-4. Use the spacebar to hide / show elements
+1. Inside the builder, click on the bookmarklet once.
+2. To enter interactive mode, simply type `ctrl + shift + i`
+3. The builder menu items will automatically collapse
+4. Use the arrow keys to [navigate the builder](#navigation)
+5. Use the spacebar to hide / show elements
 
 ## Navigation
 
