@@ -40,9 +40,15 @@ The right arrow will expand a container
 1. If focus is on a container element, will expand / collapse. 
 2. If focus is on an editable element, will launch editor for element (image editor for images / shift+enter for inline text editor for text, etc)
 
+## Builder Functionalities
+
 > Shift+Enter
 
 Enter inline text editing mode
+
+> Ctrl+shift+z
+
+Clear formatting on the currently highlighted text
 
 > Ctrl+shift+c
 
@@ -51,6 +57,10 @@ Collapse all
 > Esc
 
 Will close any modal that is currently opened and close out editing mode.
+
+> Ctrl+`
+
+Toggle sidebar
 
 > Ctrl+1
 
@@ -64,6 +74,10 @@ Tablet Viewing Mode
 
 Phone Viewing Mode
 
+> Ctrl+x
+
+Switch between Content and Styles editing modes
+
 > Ctrl+s
 
 Save page
@@ -71,10 +85,6 @@ Save page
 > Ctrl+p
 
 Publish page
-
-> Ctrl+x
-
-Switch between Content and Styles editing modes
 
 ## Contributing
 
