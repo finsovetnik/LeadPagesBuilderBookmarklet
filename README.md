@@ -1,13 +1,13 @@
 # LeadPages&trade; Builder Bookmarklet
 
-This Bookmarklet exposes keybinding functionality for manipulating the builder. It utilizes [Mousetrap](http://craig.is/killing/mice) for the bindings. 
+This Bookmarklet exposes keybinding functionality for manipulating the builder. It utilizes [Mousetrap](http://craig.is/killing/mice) for the bindings.
 
 ## Installation
 
 Since Github doesn't support embedded bookmarklets, bookmark this page, then edit the bookmark, giving it a name of **Builder Keybinder**, and a URL of the following:
- 
+
 ```javascript
-javascript:(function(){var el=document.createElement('script');el.src='https://cdn.rawgit.com/LeadPages/builderBookmarklet/master/builderKeybinding.js';document.body.appendChild(el);})();
+javascript:(function(){var el=document.createElement('script');el.src='https://cdn.rawgit.com/LeadPages/LeadPagesBuilderBookmarklet/master/builderKeybinding.js';document.body.appendChild(el);})();
 ```
 
 ## Usage
@@ -38,7 +38,7 @@ The right arrow will expand a container
 
 > Enter
 
-1. If focus is on a container element, will expand / collapse. 
+1. If focus is on a container element, will expand / collapse.
 2. If focus is on an editable element, will launch editor for element (image editor for images / shift+enter for inline text editor for text, etc)
 
 ## Builder Functionalities
