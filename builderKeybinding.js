@@ -18,7 +18,7 @@ javascript: void function() {
 
 	style.type = 'text/css';
 
-	styleArr.push('.currentInteractiveElement { background-color: #F1B9BA !important; }');         
+	styleArr.push('.currentInteractiveElement { background-color: #F1B9BA !important; }');
 
 	if (style.styleSheet){
 	  style.styleSheet.cssText = styleArr.join('');
@@ -36,7 +36,7 @@ javascript: void function() {
 
 	setTimeout(function () {
 
-		App.viewport.notify('Keyboard shortcuts initialized! Hit <b>Ctrl+shift+i</b> to get started!');
+		App.viewport.notify('Keyboard shortcuts initialized! Type ? for help!', 3000);
 
 		var editorWindow = $('iframe.ui-frame').contents();
 
@@ -75,10 +75,9 @@ javascript: void function() {
 			}
 		};
 
-		Mousetrap.bind('ctrl+shift+i', function (e) {
-			
-			//Dismiss alert box
-			$('.alert').find('.close').trigger('click');
+
+
+		//Mousetrap.bind('ctrl+shift+i', function (e) {
 
 			var modalHTML = [
 					'<div id="shortcuts" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="shortCutsLabel" aria-hidden="true">',
@@ -130,7 +129,7 @@ javascript: void function() {
 				currentElement = $('.list-group-item').eq(0);
 				toggleInteractiveClass(currentElement, true);
 			});
-			
+
 			//Move up one element
 			Mousetrap.bind('up', function (e) {
 				toggleInteractiveClass(currentElement, false);
@@ -138,7 +137,7 @@ javascript: void function() {
 				setCurrentElement(tmpElement);
 				toggleInteractiveClass(currentElement, true);
 			});
-			
+
 			//Move down one element
 			Mousetrap.bind('down', function (e) {
 				toggleInteractiveClass(currentElement, false);
@@ -146,11 +145,11 @@ javascript: void function() {
 				setCurrentElement(tmpElement);
 				toggleInteractiveClass(currentElement, true);
 			});
-			
+
 			//Collapse current level back to parent
 			Mousetrap.bind('left', function (e) {
 				toggleInteractiveClass(currentElement, false);
-				tmpElement = 
+				tmpElement =
 					currentElement
 						.prevAll()
 							.find('.icon .expand.fa-minus-square')
@@ -161,14 +160,14 @@ javascript: void function() {
 				setCurrentElement(tmpElement);
 				toggleInteractiveClass(currentElement, true);
 			});
-			
+
 			//Hide/show
 			Mousetrap.bind('space', function (e) {
 			 	var eye = currentElement.find('.glyphicon-eye-open');
 			 	eye = eye.length ? 'open' : 'close';
 				currentElement.find('.glyphicon-eye-'+eye).trigger('click');
 			});
-			
+
 			//Expand
 			Mousetrap.bind('right', function (e) {
 				toggleInteractiveClass(currentElement, false);
@@ -201,7 +200,7 @@ javascript: void function() {
 					dataID = currentElement.closest('li').data('editable-id');
 
 				dataID = editorWindow.find('#'+dataID).length ? editorWindow.find('#'+dataID) : editorWindow.find('[data-lead-id="'+dataID+'"');
-				
+
 
 				if(isTextElement.length){
 					App.viewport.showTextEditor(dataID[0], true);
@@ -225,7 +224,7 @@ javascript: void function() {
 
 			//Toggle sidebar
 			Mousetrap.bind('ctrl+`', function (){
-				var sidebar = $('.menu.ui-main-menu'); 
+				var sidebar = $('.menu.ui-main-menu');
 
 				if(sidebar.css('left') == '0px'){
 					App.viewport.hideMenu();
@@ -267,13 +266,19 @@ javascript: void function() {
 				var editingTab = $('#list-content').is(':visible') ? "styles" : "content";
 
 				$('.editable-settings').find('[data-flags="'+editingTab+'"]').trigger('click');
-				
+
 			});
 
 			Mousetrap.bind('shift+/', function(){
       			if($('#shortcuts').length){
       				$('#shortcuts').modal('show');
       			}
+			});
+
+			//Easter Egg!
+			Mousetrap.bind('up up down down left right left right b a enter', function() {
+			    var win = window.open('http://www.freearcade.com/Contra.flash/Contra.html', '_blank');
+			    win.focus();
 			});
 
 
@@ -287,7 +292,7 @@ javascript: void function() {
 	      		mt.bind('esc', function (e) {
 	      			parent.focus();
 	      			App.viewport.hideTextEditor();
-	      		});	
+	      		});
 
 	      		//Clear formatting
 	      		mt.bind('ctrl+shift+z', function(){
@@ -307,7 +312,7 @@ javascript: void function() {
 			});
 
 			return false;
-		});
+		//});
 
 	}, 2000);
 
