@@ -107,10 +107,10 @@ javascript: void function() {
 	      		]
 
       		$('body').append(modalHTML.join(''));
-      		$('#shortcuts').modal('show');
+      		//$('#shortcuts').modal('show');
 
       		//BUG: This will replace the previously injected Mousetrap.js
-      		Mousetrap.reset();
+      		//Mousetrap.reset();
 
       		// collapse all on initial Mousetrap binding
 			$('.expand.fa-minus-square').trigger('click');
