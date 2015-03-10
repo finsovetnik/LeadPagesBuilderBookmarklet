@@ -75,9 +75,7 @@ javascript: void function() {
 			}
 		};
 
-
-
-		//Mousetrap.bind('ctrl+shift+i', function (e) {
+		Mousetrap.bind('ctrl+shift+i', function (e) {
 
 			var modalHTML = [
 					'<div id="shortcuts" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="shortCutsLabel" aria-hidden="true">',
@@ -107,10 +105,10 @@ javascript: void function() {
 	      		]
 
       		$('body').append(modalHTML.join(''));
-      		//$('#shortcuts').modal('show');
+      		$('#shortcuts').modal('show');
 
       		//BUG: This will replace the previously injected Mousetrap.js
-      		//Mousetrap.reset();
+      		Mousetrap.reset();
 
       		// collapse all on initial Mousetrap binding
 			$('.expand.fa-minus-square').trigger('click');
@@ -312,7 +310,9 @@ javascript: void function() {
 			});
 
 			return false;
-		//});
+		});
+
+		Mousetrap.trigger('ctrl+shift+i');
 
 	}, 2000);
 
