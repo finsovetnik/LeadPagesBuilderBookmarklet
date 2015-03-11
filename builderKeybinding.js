@@ -75,244 +75,235 @@ javascript: void function() {
 			}
 		};
 
-		//Mousetrap.bind('ctrl+shift+i', function (e) {
+		var modalHTML = [
+				'<div id="shortcuts" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="shortCutsLabel" aria-hidden="true">',
+				'<div class="modal-dialog">',
+				'<div class="modal-content" style="background: rgba(51, 51, 51, 0.85); color: #ffffff;">',
+      			'<div class="modal-body">',
+      			'<div class="container-fluid"><div class="row">',
+      			'<div class="col-sm-4 col-md-4">',
+      			'<h5>&lt;?&gt;</h5><p>Keyboard shortcuts<p>',
+      			'<h5>&lt;Up / Down&gt;</h5><p>Move up or down</p>',
+      			'<h5>&lt;Left / Right&gt;</h5><p>Collapse / Expand</p>',
+      			'<h5>&lt;Enter&gt;</h5><p>If focus on container element will expand/collapse, scroll to element, and open up editing mode for images, links, videos',
+      			'<h5>&lt;Shift+Enter&gt;</h5><p>Enter inline editing mode for <b>Text</b> element',
+      			'</div><div class="col-sm-4 col-md-4">',
+      			'<h5>&lt;Ctrl+shift+z&gt;</h5><p>Clear format from highlighted texts</p>',
+      			'<h5>&lt;Esc&gt;</h5><p>Dismiss editor modals (excepted LeadBox) and refocus to sidebar if in Text editing mode</p>',
+      			'<h5>&lt;Ctrl+Shift+C&gt;</h5><p>Collapse all</p>',
+      			'<h5>&lt;Ctrl+`&gt;</h5><p>Toggle Sidebar</p>',
+      			'<h5>&lt;Ctrl+1&gt; / &lt;Ctrl+2&gt; / &lt;Ctrl+3&gt;</h5><p>Responsive / Tablet / Phone viewing mode</p>',
+      			'</div><div class="col-sm-4 col-md-4">',
+      			'<h5>&lt;Ctrl+s&gt;</h5><p>Save page</p>',
+      			'<h5>&lt;Ctrl+p&gt;</h5><p>Publish (mostly show the publish options)</p>',
+      			'<h5>&lt;Ctrl+x&gt;</h5><p>Switch between Content and Styles editing modes</p>',
+      			'</div>',
+      			'</div></div>',
+      			'</div></div></div></div></div>'
+      		]
 
-			var modalHTML = [
-					'<div id="shortcuts" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="shortCutsLabel" aria-hidden="true">',
-					'<div class="modal-dialog">',
-					'<div class="modal-content" style="background: rgba(51, 51, 51, 0.85); color: #ffffff;">',
-	      			'<div class="modal-body">',
-	      			'<div class="container-fluid"><div class="row">',
-	      			'<div class="col-sm-4 col-md-4">',
-	      			'<h5>&lt;?&gt;</h5><p>Keyboard shortcuts<p>',
-	      			'<h5>&lt;Up / Down&gt;</h5><p>Move up or down</p>',
-	      			'<h5>&lt;Left / Right&gt;</h5><p>Collapse / Expand</p>',
-	      			'<h5>&lt;Enter&gt;</h5><p>If focus on container element will expand/collapse, scroll to element, and open up editing mode for images, links, videos',
-	      			'<h5>&lt;Shift+Enter&gt;</h5><p>Enter inline editing mode for <b>Text</b> element',
-	      			'</div><div class="col-sm-4 col-md-4">',
-	      			'<h5>&lt;Ctrl+shift+z&gt;</h5><p>Clear format from highlighted texts</p>',
-	      			'<h5>&lt;Esc&gt;</h5><p>Dismiss editor modals (excepted LeadBox) and refocus to sidebar if in Text editing mode</p>',
-	      			'<h5>&lt;Ctrl+Shift+C&gt;</h5><p>Collapse all</p>',
-	      			'<h5>&lt;Ctrl+`&gt;</h5><p>Toggle Sidebar</p>',
-	      			'<h5>&lt;Ctrl+1&gt; / &lt;Ctrl+2&gt; / &lt;Ctrl+3&gt;</h5><p>Responsive / Tablet / Phone viewing mode</p>',
-	      			'</div><div class="col-sm-4 col-md-4">',
-	      			'<h5>&lt;Ctrl+s&gt;</h5><p>Save page</p>',
-	      			'<h5>&lt;Ctrl+p&gt;</h5><p>Publish (mostly show the publish options)</p>',
-	      			'<h5>&lt;Ctrl+x&gt;</h5><p>Switch between Content and Styles editing modes</p>',
-	      			'</div>',
-	      			'</div></div>',
-	      			'</div></div></div></div></div>'
-	      		]
+  		$('body').append(modalHTML.join(''));
 
-      		$('body').append(modalHTML.join(''));
-      		//$('#shortcuts').modal('show');
+  		// collapse all on initial Mousetrap binding
+		$('.expand.fa-minus-square').trigger('click');
+		currentElement = $('.list-group-item').eq(0);
+		toggleInteractiveClass(currentElement, true);
 
-      		//BUG: This will replace the previously injected Mousetrap.js
-      		//Mousetrap.reset();
+		//Toggle Sidebar
+		Mousetrap.bind('ctrl+shift+h', function(){
+			App.Interface.viewport.toggleMenu();
+		});
 
-      		// collapse all on initial Mousetrap binding
+		//Collapse All
+		Mousetrap.bind('ctrl+shift+c', function(){
+			toggleInteractiveClass(currentElement, false);
 			$('.expand.fa-minus-square').trigger('click');
 			currentElement = $('.list-group-item').eq(0);
 			toggleInteractiveClass(currentElement, true);
+		});
 
-			//Toggle Sidebar
-			Mousetrap.bind('ctrl+shift+h', function(){
-				App.Interface.viewport.toggleMenu();
-			});
+		//Move up one element
+		Mousetrap.bind('up', function (e) {
+			toggleInteractiveClass(currentElement, false);
+			tmpElement = currentElement.prevAll(':visible:first');
+			setCurrentElement(tmpElement);
+			toggleInteractiveClass(currentElement, true);
+		});
 
-			//Collapse All
-			Mousetrap.bind('ctrl+shift+c', function(){
-				toggleInteractiveClass(currentElement, false);
-				$('.expand.fa-minus-square').trigger('click');
-				currentElement = $('.list-group-item').eq(0);
-				toggleInteractiveClass(currentElement, true);
-			});
+		//Move down one element
+		Mousetrap.bind('down', function (e) {
+			toggleInteractiveClass(currentElement, false);
+			tmpElement = currentElement.nextAll(':visible:first');
+			setCurrentElement(tmpElement);
+			toggleInteractiveClass(currentElement, true);
+		});
 
-			//Move up one element
-			Mousetrap.bind('up', function (e) {
-				toggleInteractiveClass(currentElement, false);
-				tmpElement = currentElement.prevAll(':visible:first');
-				setCurrentElement(tmpElement);
-				toggleInteractiveClass(currentElement, true);
-			});
+		//Collapse current level back to parent
+		Mousetrap.bind('left', function (e) {
+			toggleInteractiveClass(currentElement, false);
+			tmpElement =
+				currentElement
+					.prevAll()
+						.find('.icon .expand.fa-minus-square')
+						.last()
+						.trigger('click')
+					.closest('.list-group-item');
 
-			//Move down one element
-			Mousetrap.bind('down', function (e) {
-				toggleInteractiveClass(currentElement, false);
-				tmpElement = currentElement.nextAll(':visible:first');
-				setCurrentElement(tmpElement);
-				toggleInteractiveClass(currentElement, true);
-			});
+			setCurrentElement(tmpElement);
+			toggleInteractiveClass(currentElement, true);
+		});
 
-			//Collapse current level back to parent
-			Mousetrap.bind('left', function (e) {
-				toggleInteractiveClass(currentElement, false);
-				tmpElement =
-					currentElement
-						.prevAll()
-							.find('.icon .expand.fa-minus-square')
-							.last()
-							.trigger('click')
-						.closest('.list-group-item');
+		//Hide/show
+		Mousetrap.bind('space', function (e) {
+		 	var eye = currentElement.find('.glyphicon-eye-open');
+		 	eye = eye.length ? 'open' : 'close';
+			currentElement.find('.glyphicon-eye-'+eye).trigger('click');
+		});
 
-				setCurrentElement(tmpElement);
-				toggleInteractiveClass(currentElement, true);
-			});
+		//Expand
+		Mousetrap.bind('right', function (e) {
+			toggleInteractiveClass(currentElement, false);
+			currentElement.find('.icon .expand.fa-plus-square').trigger('click');
+			toggleInteractiveClass(currentElement, true);
+		});
 
-			//Hide/show
-			Mousetrap.bind('space', function (e) {
-			 	var eye = currentElement.find('.glyphicon-eye-open');
-			 	eye = eye.length ? 'open' : 'close';
-				currentElement.find('.glyphicon-eye-'+eye).trigger('click');
-			});
+		//Expands/Collapse parent + scroll to element + opens up editor/modal
+		Mousetrap.bind('enter', function (e) {
 
-			//Expand
-			Mousetrap.bind('right', function (e) {
-				toggleInteractiveClass(currentElement, false);
-				currentElement.find('.icon .expand.fa-plus-square').trigger('click');
-				toggleInteractiveClass(currentElement, true);
-			});
+			App.viewport.hideTextEditor();
 
-			//Expands/Collapse parent + scroll to element + opens up editor/modal
-			Mousetrap.bind('enter', function (e) {
+			var dataID = currentElement.closest('li').data('editable-id');
 
+			//TODO: Paste in url for video element
+			//var isVideoElement = currentElement.find('fa-video-camera');
+
+			if($('.modal.fade.in').is(':visible')){
+				return false;
+			} else {
+				currentElement.find('.title').trigger('click');
+			}
+
+			scrollToElement( dataID );
+		});
+
+		//Enter text editing mode
+		Mousetrap.bind('shift+enter', function (e) {
+			var isTextElement = currentElement.find('.fa-font'),
+				dataID = currentElement.closest('li').data('editable-id');
+
+			dataID = editorWindow.find('#'+dataID).length ? editorWindow.find('#'+dataID) : editorWindow.find('[data-lead-id="'+dataID+'"');
+
+
+			if(isTextElement.length){
+				App.viewport.showTextEditor(dataID[0], true);
+			}
+		});
+
+		//Close modals
+		Mousetrap.bind('esc', function (e) {
+			var modal = $('.modal.fade.in'),
+				doneButton = modal.find('.btn-primary') || modal.find('iframe').contents().find('.btn-primary');
+
+			if(modal.is(':visible')){
+				doneButton.trigger('click');
+			}
+
+			if($('.viewmode-editing').is(':visible')){
 				App.viewport.hideTextEditor();
+			}
 
-				var dataID = currentElement.closest('li').data('editable-id');
+		});
 
-				//TODO: Paste in url for video element
-				//var isVideoElement = currentElement.find('fa-video-camera');
+		//Toggle sidebar
+		Mousetrap.bind('ctrl+`', function (){
+			var sidebar = $('.menu.ui-main-menu');
 
-				if($('.modal.fade.in').is(':visible')){
-					return false;
-				} else {
-					currentElement.find('.title').trigger('click');
-				}
+			if(sidebar.css('left') == '0px'){
+				App.viewport.hideMenu();
+			} else {
+				App.viewport.showMenu();
+			}
+		});
 
-				scrollToElement( dataID );
-			});
+		//Desktop View Mode
+		Mousetrap.bind('ctrl+1', function (e) {
+			$('[data-action="view-desktop"]').trigger('click');
+			App.viewport.previewDesktop();
+		});
 
-			//Enter text editing mode
-			Mousetrap.bind('shift+enter', function (e) {
-				var isTextElement = currentElement.find('.fa-font'),
-					dataID = currentElement.closest('li').data('editable-id');
+		//Tablet View Mode
+		Mousetrap.bind('ctrl+2', function (e) {
+			$('[data-action="view-tablet"]').trigger('click');
+			App.viewport.previewTablet();
+		});
 
-				dataID = editorWindow.find('#'+dataID).length ? editorWindow.find('#'+dataID) : editorWindow.find('[data-lead-id="'+dataID+'"');
+		//Phone View Mode
+		Mousetrap.bind('ctrl+3', function (e) {
+			$('[data-action="view-mobile"]').trigger('click');
+			App.viewport.previewMobile();
+		});
+
+		//Save
+		Mousetrap.bind('ctrl+s', function (e) {
+			App.viewport.savePage();
+		});
+
+		//Publish
+		Mousetrap.bind('ctrl+p', function (e) {
+			App.viewport.showPublishMenu();
+		});
+
+		//Switch between Content / Styles tabs
+		Mousetrap.bind('ctrl+x', function () {
+			var editingTab = $('#list-content').is(':visible') ? "styles" : "content";
+
+			$('.editable-settings').find('[data-flags="'+editingTab+'"]').trigger('click');
+
+		});
+
+		Mousetrap.bind('shift+/', function(){
+  			if($('#shortcuts').length){
+  				$('#shortcuts').modal('show');
+  			}
+		});
+
+		//Easter Egg!
+		Mousetrap.bind('up up down down left right left right b a enter', function() {
+		    var win = window.open('http://www.freearcade.com/Contra.flash/Contra.html', '_blank');
+		    win.focus();
+		});
 
 
-				if(isTextElement.length){
-					App.viewport.showTextEditor(dataID[0], true);
-				}
-			});
+  		createMouseTrapScript(editorWindow[0]);
 
-			//Close modals
-			Mousetrap.bind('esc', function (e) {
-				var modal = $('.modal.fade.in'),
-					doneButton = modal.find('.btn-primary') || modal.find('iframe').contents().find('.btn-primary');
+  		setTimeout(function () {
+  			var mt = $('iframe.ui-frame')[0].contentWindow.Mousetrap;
+  			mt.stopCallback = function () {};
 
-				if(modal.is(':visible')){
-					doneButton.trigger('click');
-				}
+  			//Re-focus on side bar
+      		mt.bind('esc', function (e) {
+      			parent.focus();
+      			App.viewport.hideTextEditor();
+      		});
 
-				if($('.viewmode-editing').is(':visible')){
-					App.viewport.hideTextEditor();
-				}
-
-			});
-
-			//Toggle sidebar
-			Mousetrap.bind('ctrl+`', function (){
-				var sidebar = $('.menu.ui-main-menu');
-
-				if(sidebar.css('left') == '0px'){
-					App.viewport.hideMenu();
-				} else {
-					App.viewport.showMenu();
-				}
-			});
-
-			//Desktop View Mode
-			Mousetrap.bind('ctrl+1', function (e) {
-				$('[data-action="view-desktop"]').trigger('click');
-				App.viewport.previewDesktop();
-			});
-
-			//Tablet View Mode
-			Mousetrap.bind('ctrl+2', function (e) {
-				$('[data-action="view-tablet"]').trigger('click');
-				App.viewport.previewTablet();
-			});
-
-			//Phone View Mode
-			Mousetrap.bind('ctrl+3', function (e) {
-				$('[data-action="view-mobile"]').trigger('click');
-				App.viewport.previewMobile();
-			});
-
-			//Save
-			Mousetrap.bind('ctrl+s', function (e) {
-				App.viewport.savePage();
-			});
-
-			//Publish
-			Mousetrap.bind('ctrl+p', function (e) {
-				App.viewport.showPublishMenu();
-			});
-
-			//Switch between Content / Styles tabs
-			Mousetrap.bind('ctrl+x', function () {
-				var editingTab = $('#list-content').is(':visible') ? "styles" : "content";
-
-				$('.editable-settings').find('[data-flags="'+editingTab+'"]').trigger('click');
-
-			});
-
-			Mousetrap.bind('shift+/', function(){
-      			if($('#shortcuts').length){
-      				$('#shortcuts').modal('show');
+      		//Clear formatting
+      		mt.bind('ctrl+shift+z', function(){
+      			var textEditorMode = App.viewport.$;
+      			if(textEditorMode.find('.viewmode-editing').is(':visible')){
+      				textEditorMode.find('#cke_139').trigger('click');
       			}
-			});
+      		});
+  		}, 2000)
 
-			//Easter Egg!
-			Mousetrap.bind('up up down down left right left right b a enter', function() {
-			    var win = window.open('http://www.freearcade.com/Contra.flash/Contra.html', '_blank');
-			    win.focus();
-			});
+		//When click on link it will also scroll to the element
+		$('a.title').click(function(){
+			toggleInteractiveClass( currentElement, false );
+			scrollToElement( $(this).closest('li').data('editable-id') );
+			setCurrentElement($(this).closest('li'));
+			toggleInteractiveClass( currentElement, true );
+		});
 
-
-      		createMouseTrapScript(editorWindow[0]);
-
-      		setTimeout(function () {
-      			var mt = $('iframe.ui-frame')[0].contentWindow.Mousetrap;
-      			mt.stopCallback = function () {};
-
-      			//Re-focus on side bar
-	      		mt.bind('esc', function (e) {
-	      			parent.focus();
-	      			App.viewport.hideTextEditor();
-	      		});
-
-	      		//Clear formatting
-	      		mt.bind('ctrl+shift+z', function(){
-	      			var textEditorMode = App.viewport.$;
-	      			if(textEditorMode.find('.viewmode-editing').is(':visible')){
-	      				textEditorMode.find('#cke_139').trigger('click');
-	      			}
-	      		});
-      		}, 2000)
-
-			//When click on link it will also scroll to the element
-			$('a.title').click(function(){
-				toggleInteractiveClass( currentElement, false );
-				scrollToElement( $(this).closest('li').data('editable-id') );
-				setCurrentElement($(this).closest('li'));
-				toggleInteractiveClass( currentElement, true );
-			});
-
-			return false;
-		//});
-
-		//Mousetrap.trigger('ctrl+shift+i');
+		return false;
 
 	}, 2000);
 
