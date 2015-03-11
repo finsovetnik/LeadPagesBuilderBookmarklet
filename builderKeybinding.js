@@ -36,7 +36,7 @@ javascript: void function() {
 
 	setTimeout(function () {
 
-		App.viewport.notify('Keyboard shortcuts initialized! Type ? for help!', 3000);
+		App.viewport.notify('Keyboard shortcuts initialized! Type ? for help!', 2500);
 
 		var editorWindow = $('iframe.ui-frame').contents();
 
