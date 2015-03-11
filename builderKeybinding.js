@@ -18,7 +18,7 @@ javascript: void function() {
 
 	style.type = 'text/css';
 
-	styleArr.push('.currentInteractiveElement { background-color: #6fbbe8 !important; }');
+	styleArr.push('.currentInteractiveElement { background-color: #abd2e9 !important; }');
 
 	if (style.styleSheet){
 	  style.styleSheet.cssText = styleArr.join('');
