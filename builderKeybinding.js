@@ -18,7 +18,8 @@ javascript: void function() {
 
 	style.type = 'text/css';
 
-	styleArr.push('.currentInteractiveElement { background-color: #1ec279; color: #fff; !important; }');
+	styleArr.push('.currentInteractiveElement { background-color: #1EC272;}');
+	styleArr.push('.currentInteractiveElement a { color: white; }');
 
 	if (style.styleSheet){
 	  style.styleSheet.cssText = styleArr.join('');
@@ -266,13 +267,6 @@ javascript: void function() {
   				$('#shortcuts').modal('show');
   			}
 		});
-
-		//Easter Egg!
-		Mousetrap.bind('up up down down left right left right b a enter', function() {
-		    var win = window.open('http://www.freearcade.com/Contra.flash/Contra.html', '_blank');
-		    win.focus();
-		});
-
 
   		createMouseTrapScript(editorWindow[0]);
 
